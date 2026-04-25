@@ -3,6 +3,9 @@ BUILDROOT_REPO ?= https://github.com/buildroot/buildroot.git
 BUILDROOT_REF ?= master
 OUTPUT_DIR ?= output
 DEFCONFIG ?= $(CURDIR)/configs/pi4_64_defconfig
+BR2_EXTERNAL_DIR ?= $(CURDIR)/br2_external
+
+BR2_MAKE = $(MAKE) -C "$(BUILDROOT_DIR)" O="$(CURDIR)/$(OUTPUT_DIR)" BR2_EXTERNAL="$(BR2_EXTERNAL_DIR)"
 
 .PHONY: help submodules submodules-update buildroot defconfig menuconfig linux-menuconfig busybox-menuconfig build clean distclean mrproper savedefconfig
 
@@ -35,33 +38,33 @@ buildroot:
 	@cd "$(BUILDROOT_DIR)" && git fetch --tags --quiet && git checkout "$(BUILDROOT_REF)"
 
 defconfig: buildroot
-	$(MAKE) -C "$(BUILDROOT_DIR)" O="$(CURDIR)/$(OUTPUT_DIR)" BR2_DEFCONFIG="$(DEFCONFIG)" defconfig
+	$(BR2_MAKE) BR2_DEFCONFIG="$(DEFCONFIG)" defconfig
 
 menuconfig: defconfig
-	$(MAKE) -C "$(BUILDROOT_DIR)" O="$(CURDIR)/$(OUTPUT_DIR)" menuconfig
+	$(BR2_MAKE) menuconfig
 
 linux-menuconfig: defconfig
-	$(MAKE) -C "$(BUILDROOT_DIR)" O="$(CURDIR)/$(OUTPUT_DIR)" linux-menuconfig
+	$(BR2_MAKE) linux-menuconfig
 
 busybox-menuconfig: defconfig
-	$(MAKE) -C "$(BUILDROOT_DIR)" O="$(CURDIR)/$(OUTPUT_DIR)" busybox-menuconfig
+	$(BR2_MAKE) busybox-menuconfig
 
 build: defconfig
-	$(MAKE) -C "$(BUILDROOT_DIR)" O="$(CURDIR)/$(OUTPUT_DIR)"
+	$(BR2_MAKE)
 
 clean:
 	@if [ -d "$(OUTPUT_DIR)" ]; then \
-		$(MAKE) -C "$(BUILDROOT_DIR)" O="$(CURDIR)/$(OUTPUT_DIR)" clean; \
+		$(BR2_MAKE) clean; \
 	fi
 
 distclean:
 	@if [ -d "$(OUTPUT_DIR)" ]; then \
-		$(MAKE) -C "$(BUILDROOT_DIR)" O="$(CURDIR)/$(OUTPUT_DIR)" distclean; \
+		$(BR2_MAKE) distclean; \
 	fi
 
 mrproper:
 	rm -rf "$(OUTPUT_DIR)" "$(BUILDROOT_DIR)"
 
 savedefconfig: defconfig
-	$(MAKE) -C "$(BUILDROOT_DIR)" O="$(CURDIR)/$(OUTPUT_DIR)" savedefconfig
+	$(BR2_MAKE) savedefconfig
 	cp "$(OUTPUT_DIR)/defconfig" "$(DEFCONFIG)"

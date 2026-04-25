@@ -1,0 +1,5 @@
+config BR2_PACKAGE_AV_SERVICES
+	bool "av_services"
+	help
+	  Installs the av_services repository into /opt/av_services
+	  in the target root filesystem.

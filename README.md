@@ -87,3 +87,16 @@ Use your preferred imaging tool (for example, Raspberry Pi Imager or `dd`) to wr
 
 - This setup starts from Buildroot's upstream Raspberry Pi 4 64-bit defconfig.
 - Kernel, firmware, and image generation settings are maintained in `configs/pi4_64_defconfig`.
+
+## Autonomous Stack Baseline
+
+The current `configs/pi4_64_defconfig` is tuned as a practical autonomous-vehicle edge baseline for Raspberry Pi 4:
+
+- Perception and media: OpenCV4, GStreamer, FFmpeg
+- Runtime and scripting: Python 3, pip, NumPy, PyYAML
+- Vehicle and sensor I/O: can-utils, libsocketcan, i2c-tools, libgpiod2, gpsd
+- Messaging and telemetry: Mosquitto (MQTT), ZeroMQ
+- Networking and diagnostics: iproute2, ethtool, tcpdump, iperf3
+- Time synchronization: chrony, linuxptp
+
+This is a foundation image for autonomy development, not a full AD stack (for example ROS 2/Autoware integration is still a next step).

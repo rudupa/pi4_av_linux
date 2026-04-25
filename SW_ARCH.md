@@ -37,7 +37,7 @@ Target profile:
 
 ```mermaid
 flowchart TB
-	A["Application Layer<br/>Perception, Localization, Planning, Control<br/>Vehicle Adapters and Supervisors"]
+	A["Application Layer<br/>Perception, Localization, Planning, Control<br/>Vehicle Adapters and Supervisors<br/>external/av_services core services"]
 	B["Middleware Layer<br/>OpenCV4, GStreamer, FFmpeg<br/>Mosquitto MQTT, ZeroMQ<br/>gpsd, libsocketcan, libgpiod2<br/>chrony, linuxptp"]
 	C["OS Services Layer<br/>Buildroot RootFS, BusyBox, Python3<br/>Networking and Diagnostics"]
 	D["Kernel Layer<br/>Linux bcm2711<br/>Drivers: V4L2, CAN, I2C, GPIO, Net"]
@@ -75,7 +75,7 @@ flowchart LR
 		KRN["Linux Kernel<br/>Image + Modules"]
 		OS["RootFS OS<br/>BusyBox + Python"]
 		MID["Middleware<br/>OpenCV, GStreamer, FFmpeg<br/>MQTT, ZeroMQ, gpsd"]
-		APP["Application Services<br/>Autonomy Apps and Vehicle Adapters"]
+		APP["Application Services<br/>Autonomy Apps and Vehicle Adapters<br/>external/av_services"]
 		HW["Hardware<br/>Camera, CAN, GNSS, I2C, GPIO"]
 
 		FW --> KRN
@@ -160,6 +160,9 @@ Time synchronization middleware:
 Current image focus:
 - Provides runtime dependencies and system tools for autonomy applications.
 - Does not yet include a full robotics framework stack (for example ROS 2, Autoware, custom planners, or perception nodes).
+
+Integrated application/service package:
+- `external/av_services` submodule adds AV core service processes such as gateway, health monitor, logger, OTA, and orchestrator.
 
 Expected app responsibilities above this base image:
 - Sensor ingestion pipelines (camera/CAN/GNSS)

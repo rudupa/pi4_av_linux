@@ -1,0 +1,3 @@
+[submodule "external/av_services"]
+	path = external/av_services
+	url = https://github.com/rudupa/av_services.git

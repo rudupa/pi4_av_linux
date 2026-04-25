@@ -4,11 +4,13 @@ BUILDROOT_REF ?= master
 OUTPUT_DIR ?= output
 DEFCONFIG ?= $(CURDIR)/configs/pi4_64_defconfig
 
-.PHONY: help buildroot defconfig menuconfig linux-menuconfig busybox-menuconfig build clean distclean mrproper savedefconfig
+.PHONY: help submodules submodules-update buildroot defconfig menuconfig linux-menuconfig busybox-menuconfig build clean distclean mrproper savedefconfig
 
 help:
 	@echo "Buildroot Raspberry Pi 4 repo"
 	@echo "Targets:"
+	@echo "  make submodules         - initialize and clone git submodules"
+	@echo "  make submodules-update  - update submodules to recorded commits"
 	@echo "  make buildroot           - clone/update Buildroot"
 	@echo "  make defconfig           - configure output/.config from configs/pi4_64_defconfig"
 	@echo "  make menuconfig          - open Buildroot menuconfig"
@@ -19,6 +21,12 @@ help:
 	@echo "  make distclean           - deep clean output"
 	@echo "  make mrproper            - remove Buildroot checkout and output"
 	@echo "  make savedefconfig       - save minimized config back to configs/pi4_64_defconfig"
+
+submodules:
+	@git submodule update --init --recursive
+
+submodules-update:
+	@git submodule update --recursive
 
 buildroot:
 	@if [ ! -d "$(BUILDROOT_DIR)/.git" ]; then \

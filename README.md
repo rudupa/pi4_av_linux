@@ -10,11 +10,16 @@ This repository is set up to build a bootable Raspberry Pi 4 64-bit image using 
 - `Makefile`: Main entrypoint for cloning Buildroot, applying config, and building images.
 - `configs/pi4_64_defconfig`: Buildroot defconfig for Raspberry Pi 4 (64-bit).
 - `.gitignore`: Ignores local Buildroot checkout and build outputs.
+- `.gitmodules`: Tracks git submodule mappings.
 
 ### Generated directories
 
 - `buildroot/`: Upstream Buildroot source tree cloned by `make buildroot`.
 - `output/`: Build output directory (toolchain, target rootfs, logs, and images).
+
+### Integrated submodules
+
+- `external/av_services/`: AV core platform services repository (application-layer integration package).
 
 ### Generated image artifacts
 
@@ -100,3 +105,29 @@ The current `configs/pi4_64_defconfig` is tuned as a practical autonomous-vehicl
 - Time synchronization: chrony, linuxptp
 
 This is a foundation image for autonomy development, not a full AD stack (for example ROS 2/Autoware integration is still a next step).
+
+## av_services integration
+
+This repository now integrates `https://github.com/rudupa/av_services` as a git submodule under `external/av_services`.
+
+Component equivalence summary:
+
+- This repo provides platform/base-image layers (BSP, kernel, OS, middleware packages).
+- `av_services` provides higher-level AV platform services (gateway, health, logger, OTA, orchestrator).
+- Therefore they are complementary, not equivalent.
+
+Submodule workflow:
+
+```bash
+# Initialize submodules after clone
+make submodules
+
+# Re-sync to recorded submodule commits
+make submodules-update
+```
+
+Typical end-to-end integration flow:
+
+1. Build and flash this Buildroot image to target hardware.
+2. Build and deploy `external/av_services` binaries on the target.
+3. Run AV services as systemd units (from the submodule's `systemd/` directory).

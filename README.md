@@ -56,6 +56,12 @@ You may also need additional packages depending on your host and selected Buildr
 make build
 ```
 
+If running from PowerShell with WSL:
+
+```powershell
+wsl -e bash -lc "cd /home/ritesh/pi4_linux && export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && make build"
+```
+
 2. Resulting image files are in:
 
 - `output/images/`

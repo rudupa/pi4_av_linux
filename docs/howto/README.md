@@ -13,3 +13,4 @@ This folder contains one Markdown file per task performed in this Buildroot + av
 8. `08_commit_and_push_main_and_submodule_changes.md`
 9. `09_evolve_to_systemd_av_runtime.md`
 10. `10_integrate_boot_feature_report_service.md`
+11. `11_fix_systemd_init_and_bake_static_networking.md`

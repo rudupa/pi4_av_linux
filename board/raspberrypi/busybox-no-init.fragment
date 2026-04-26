@@ -1,0 +1,3 @@
+# Keep systemd as PID 1: disable BusyBox init applet.
+# CONFIG_INIT is not set
+# CONFIG_FEATURE_USE_INITTAB is not set

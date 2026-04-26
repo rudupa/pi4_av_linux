@@ -1,0 +1,56 @@
+#!/bin/sh
+
+DAEMON=/usr/local/bin/av-core-orchestrator
+PIDFILE=/var/run/av-core-orchestrator.pid
+CONFIG=/etc/av-core/orchestrator.conf
+
+start() {
+	printf 'Starting av-core orchestrator: '
+	mkdir -p /var/run /var/lib/av-core/ota /var/log/av-core /etc/av-core
+	start-stop-daemon -S -b -m -p "$PIDFILE" -x "$DAEMON" -- "$CONFIG"
+	status=$?
+	if [ $status -eq 0 ]; then
+		echo OK
+	else
+		echo FAIL
+	fi
+	return $status
+}
+
+stop() {
+	printf 'Stopping av-core orchestrator: '
+	start-stop-daemon -K -p "$PIDFILE" -x "$DAEMON"
+	status=$?
+	if [ $status -eq 0 ]; then
+		echo OK
+		rm -f "$PIDFILE"
+	else
+		echo FAIL
+	fi
+	return $status
+}
+
+case "$1" in
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	restart)
+		stop
+		start
+		;;
+	status)
+		if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+			echo "av-core orchestrator is running"
+		else
+			echo "av-core orchestrator is stopped"
+			exit 1
+		fi
+		;;
+	*)
+		echo "Usage: $0 {start|stop|restart|status}"
+		exit 1
+		;;
+esac

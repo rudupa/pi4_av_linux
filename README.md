@@ -109,7 +109,7 @@ This is a foundation image for autonomy development, not a full AD stack (for ex
 
 ## av_services integration
 
-This repository integrates `https://github.com/rudupa/av_services` as a git submodule under `external/av_services` and also deploys it into the root filesystem through a Buildroot external package.
+This repository integrates `https://github.com/rudupa/av_services` as a git submodule under `external/av_services` and cross-builds it into the image through a Buildroot external package.
 
 Component equivalence summary:
 
@@ -130,11 +130,13 @@ make submodules-update
 Typical end-to-end integration flow:
 
 1. Build and flash this Buildroot image to target hardware.
-2. Confirm AV service sources are present on target at `/opt/av_services`.
-3. Build and run services from `/opt/av_services` on target as needed.
+2. Confirm AV binaries are present on target under `/usr/local/bin/av-core-*`.
+3. Manage startup through `/etc/init.d/S99avcore` on the target.
 
 Buildroot packaging notes:
 
 - The package is defined in `br2_external/package/av_services/`.
 - `BR2_PACKAGE_AV_SERVICES=y` is enabled in `configs/pi4_64_defconfig`.
-- During image build, the repository contents are installed into `/opt/av_services` in the target rootfs.
+- During image build, Buildroot cross-compiles the AV binaries and installs them to `/usr/local/bin`.
+- Default config files are installed to `/etc/av-core`.
+- The BusyBox init script `/etc/init.d/S99avcore` starts `av-core-orchestrator` on boot.

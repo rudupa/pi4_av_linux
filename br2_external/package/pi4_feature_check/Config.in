@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PI4_FEATURE_CHECK
+	bool "pi4_feature_check"
+	depends on BR2_INIT_SYSTEMD
+	help
+	  Installs a boot-time feature verification script and report
+	  generator for Raspberry Pi 4 AV runtime images.
+	  The service runs after boot and writes a report to:
+	  /var/log/pi4_feature_report.md

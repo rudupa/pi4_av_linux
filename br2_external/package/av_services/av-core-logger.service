@@ -1,0 +1,21 @@
+[Unit]
+Description=AV Core Logger Service
+Documentation=file:///etc/av-core/logger.conf
+After=systemd-journald.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/av-core-logger
+EnvironmentFile=-/etc/av-core/logger.conf
+Restart=on-failure
+RestartSec=5s
+WatchdogSec=30s
+NotifyAccess=main
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=av-core-logger
+StartLimitIntervalSec=60s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+[Unit]
+Description=AV Core Health Monitor
+Documentation=file:///etc/av-core/health.conf
+After=network.target av-core-orchestrator.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/av-core-health
+EnvironmentFile=-/etc/av-core/health.conf
+Restart=on-failure
+RestartSec=5s
+WatchdogSec=60s
+NotifyAccess=main
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=av-core-health
+StartLimitIntervalSec=60s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

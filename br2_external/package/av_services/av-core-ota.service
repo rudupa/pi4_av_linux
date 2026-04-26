@@ -1,0 +1,17 @@
+[Unit]
+Description=AV Core OTA Update Service
+Documentation=file:///etc/av-core/ota.conf
+After=network.target av-core-orchestrator.service
+ConditionPathExists=/var/lib/av-core/ota
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/usr/local/bin/av-core-ota
+EnvironmentFile=-/etc/av-core/ota.conf
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=av-core-ota
+
+[Install]
+WantedBy=multi-user.target

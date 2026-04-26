@@ -6,4 +6,6 @@ config BR2_PACKAGE_AV_SERVICES
 	select BR2_PACKAGE_LIBCURL_OPENSSL
 	help
 	  Cross-build and install av_services runtime binaries,
-	  default config files, and a BusyBox init script.
+	  default config files, and service startup units.
+	  Installs systemd .service units when BR2_INIT_SYSTEMD=y,
+	  or a BusyBox SysV init script otherwise.

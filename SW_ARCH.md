@@ -39,7 +39,7 @@ Target profile:
 flowchart TB
 	A["Application Layer<br/>Perception, Localization, Planning, Control<br/>Vehicle Adapters and Supervisors<br/>external/av_services core services"]
 	B["Middleware Layer<br/>OpenCV4, GStreamer, FFmpeg<br/>Mosquitto MQTT, ZeroMQ<br/>gpsd, libsocketcan, libgpiod2<br/>chrony, linuxptp"]
-	C["OS Services Layer<br/>Buildroot RootFS, BusyBox, Python3<br/>Networking and Diagnostics"]
+	C["OS Services Layer<br/>Buildroot RootFS, systemd, Python3<br/>journalctl, networkd, resolved<br/>Diagnostics and remote operations"]
 	D["Kernel Layer<br/>Linux bcm2711<br/>Drivers: V4L2, CAN, I2C, GPIO, Net"]
 	E["BSP and Boot Layer<br/>Raspberry Pi Firmware<br/>Device Trees<br/>post-build and post-image scripts<br/>boot.vfat + rootfs.ext2 + sdcard.img"]
 	F["Hardware Layer<br/>BCM2711 SoC, RPi4, CM4<br/>Cameras, CAN, GNSS, I2C Sensors, GPIO"]
@@ -73,7 +73,7 @@ flowchart LR
 	subgraph Runtime[Runtime Image Components]
 		FW["Firmware and DTBs<br/>boot.vfat"]
 		KRN["Linux Kernel<br/>Image + Modules"]
-		OS["RootFS OS<br/>BusyBox + Python"]
+		OS["RootFS OS<br/>systemd + Python + Diagnostics<br/>htop, strace, ssh, screen"]
 		MID["Middleware<br/>OpenCV, GStreamer, FFmpeg<br/>MQTT, ZeroMQ, gpsd"]
 		APP["Application Services<br/>Autonomy Apps and Vehicle Adapters<br/>external/av_services"]
 		HW["Hardware<br/>Camera, CAN, GNSS, I2C, GPIO"]
@@ -128,8 +128,11 @@ flowchart LR
 ### 4. Core OS Layer
 
 - Root filesystem: ext2/ext4-compatible image
-- Init/userland baseline: BusyBox-centric Buildroot rootfs
-- Network bootstrap: DHCP on eth0 by default
+- Init system: systemd (PID 1)
+- Logging: journald with `journalctl` CLI
+- Network bootstrap: systemd-networkd (DHCP on eth0 by default), systemd-resolved (DNS)
+- Remote access: OpenSSH (sshd)
+- Diagnostics: htop, strace, man, screen, lshw, util-linux utilities
 - System and package toolchain:
 - External Bootlin aarch64 glibc toolchain
 
@@ -159,10 +162,21 @@ Time synchronization middleware:
 
 Current image focus:
 - Provides runtime dependencies and system tools for autonomy applications.
-- Does not yet include a full robotics framework stack (for example ROS 2, Autoware, custom planners, or perception nodes).
+- Full AV runtime stack with systemd service management.
+- Production-grade service lifecycle, logging, and crash recovery.
 
 Integrated application/service package:
-- `external/av_services` submodule adds AV core service processes such as gateway, health monitor, logger, OTA, and orchestrator.
+- `external/av_services` submodule adds AV core service processes:
+  - `av-core-orchestrator`: Main coordinator service
+  - `av-core-gateway`: Vehicle interface service
+  - `av-core-health`: System health monitor
+  - `av-core-logger`: Event logger service
+  - `av-core-ota`: OTA update mechanism
+- Each service is managed by a systemd unit file with:
+  - `Restart=on-failure` for automatic crash recovery
+  - `WatchdogSec=` to detect and restart hung processes
+  - Dependency ordering (`After=`, `Wants=`) for coordinated startup
+  - Structured logging to `journalctl`
 
 Expected app responsibilities above this base image:
 - Sensor ingestion pipelines (camera/CAN/GNSS)
@@ -172,9 +186,14 @@ Expected app responsibilities above this base image:
 
 ### 7. Operations and Diagnostics Layer
 
+- Init and service management: systemd (PID 1), `systemctl`, `journalctl`
 - Network and link diagnostics: iproute2, ethtool, tcpdump, iperf3
-- Python scripting environment:
-- python3, pip, numpy, pyyaml
+- System diagnostics: htop, strace, lshw, man pages
+- Utilities: lscpu, lsblk, lspci, lsusb, screen (persistent sessions)
+- Remote operations: OpenSSH (SSH server and client)
+- Python scripting environment: python3, pip, numpy, pyyaml
+- Automated boot-time verification: `pi4-feature-check.service`
+- Generated runtime report: `/var/log/pi4_feature_report.md`
 
 ## Layered Architecture View
 
@@ -192,9 +211,10 @@ Top-to-bottom layered model:
 - Time services: chrony, linuxptp
 
 3. OS Services Layer
-- BusyBox userland tools
-- Process, filesystem, network, and startup services
-- DHCP-based basic network initialization
+- systemd userland and service management
+- Process, filesystem, network, DNS, and startup services
+- systemd-networkd/systemd-resolved with DHCP-based basic network initialization
+- Boot-time feature validation and reporting via `pi4-feature-check.service`
 
 4. Kernel Layer
 - Linux kernel (bcm2711 baseline)

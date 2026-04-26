@@ -1,0 +1,13 @@
+[Unit]
+Description=Pi4 Feature Checklist Boot Report
+After=network-online.target av-core.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/pi4_feature_check.sh
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

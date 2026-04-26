@@ -1,0 +1,23 @@
+[Unit]
+Description=AV Core Orchestrator
+Documentation=file:///etc/av-core/orchestrator.conf
+After=network.target av-core-gateway.service av-core-logger.service
+Wants=av-core-gateway.service av-core-logger.service av-core-health.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/av-core-orchestrator
+EnvironmentFile=-/etc/av-core/orchestrator.conf
+Restart=on-failure
+RestartSec=5s
+WatchdogSec=30s
+NotifyAccess=main
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=av-core-orchestrator
+# Prevent restart loop from bringing down the system
+StartLimitIntervalSec=60s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

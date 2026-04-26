@@ -29,4 +29,26 @@ define AV_SERVICES_INSTALL_INIT_SYSV
 	$(INSTALL) -D -m 0755 $(AV_SERVICES_PKGDIR)/S99avcore $(TARGET_DIR)/etc/init.d/S99avcore
 endef
 
+define AV_SERVICES_INSTALL_INIT_SYSTEMD
+	$(INSTALL) -D -m 0644 $(AV_SERVICES_PKGDIR)/av-core-orchestrator.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/av-core-orchestrator.service
+	$(INSTALL) -D -m 0644 $(AV_SERVICES_PKGDIR)/av-core-gateway.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/av-core-gateway.service
+	$(INSTALL) -D -m 0644 $(AV_SERVICES_PKGDIR)/av-core-health.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/av-core-health.service
+	$(INSTALL) -D -m 0644 $(AV_SERVICES_PKGDIR)/av-core-logger.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/av-core-logger.service
+	$(INSTALL) -D -m 0644 $(AV_SERVICES_PKGDIR)/av-core-ota.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/av-core-ota.service
+	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	ln -sf /usr/lib/systemd/system/av-core-orchestrator.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/av-core-orchestrator.service
+	ln -sf /usr/lib/systemd/system/av-core-gateway.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/av-core-gateway.service
+	ln -sf /usr/lib/systemd/system/av-core-health.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/av-core-health.service
+	ln -sf /usr/lib/systemd/system/av-core-logger.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/av-core-logger.service
+endef
+
 $(eval $(cmake-package))

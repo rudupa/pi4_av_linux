@@ -1,5 +1,6 @@
 menu "PI4 AV external packages"
 
 source "$BR2_EXTERNAL_PI4_AV_EXTERNAL_PATH/package/av_services/Config.in"
+source "$BR2_EXTERNAL_PI4_AV_EXTERNAL_PATH/package/pi4_feature_check/Config.in"
 
 endmenu

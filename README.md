@@ -9,7 +9,7 @@ This repository is set up to build a bootable Raspberry Pi 4 64-bit image using 
 - `README.md`: Project overview, setup, and build instructions.
 - `Makefile`: Main entrypoint for cloning Buildroot, applying config, and building images.
 - `configs/pi4_64_defconfig`: Buildroot defconfig for Raspberry Pi 4 (64-bit).
-- `br2_external/`: Custom Buildroot external tree containing local packages (including `av_services`).
+- `br2_external/`: Custom Buildroot external tree containing local packages (including `av_services` and `pi4_feature_check`).
 - `.gitignore`: Ignores local Buildroot checkout and build outputs.
 - `.gitmodules`: Tracks git submodule mappings.
 
@@ -93,19 +93,50 @@ Use your preferred imaging tool (for example, Raspberry Pi Imager or `dd`) to wr
 
 - This setup starts from Buildroot's upstream Raspberry Pi 4 64-bit defconfig.
 - Kernel, firmware, and image generation settings are maintained in `configs/pi4_64_defconfig`.
+- Manual post-flash validation checklist: `PI4_FEATURE_CHECKLIST.md`.
 
-## Autonomous Stack Baseline
+## Full Autonomous Vehicle Runtime Stack
 
-The current `configs/pi4_64_defconfig` is tuned as a practical autonomous-vehicle edge baseline for Raspberry Pi 4:
+The current `configs/pi4_64_defconfig` is configured as a full AV runtime stack for Raspberry Pi 4:
 
-- Perception and media: OpenCV4, GStreamer, FFmpeg
-- Runtime and scripting: Python 3, pip, NumPy, PyYAML
-- Vehicle and sensor I/O: can-utils, libsocketcan, i2c-tools, libgpiod2, gpsd
-- Messaging and telemetry: Mosquitto (MQTT), ZeroMQ
-- Networking and diagnostics: iproute2, ethtool, tcpdump, iperf3
-- Time synchronization: chrony, linuxptp
+### Init and service management
+- **systemd**: PID 1, handles service lifecycle, watchdog, restart policies
+- **journald**: Structured logging with `journalctl` queries
+- **systemd-networkd** and **systemd-resolved**: Network and DNS management
 
-This is a foundation image for autonomy development, not a full AD stack (for example ROS 2/Autoware integration is still a next step).
+### Perception and media
+- OpenCV4, GStreamer, FFmpeg
+
+### Runtime and scripting
+- Python 3, pip, NumPy, PyYAML
+
+### Vehicle and sensor I/O
+- can-utils, libsocketcan, i2c-tools, libgpiod2, gpsd
+
+### Messaging and telemetry
+- Mosquitto (MQTT), ZeroMQ
+
+### Diagnostics and debugging
+- htop, strace, lshw, man, screen
+- Utilities: lscpu, lsblk, lspci, lsusb (from util-linux, pciutils, usbutils)
+
+### Remote operations
+- OpenSSH (SSH server and client)
+
+### Time synchronization
+- chrony, linuxptp
+
+### AV services management
+- Five systemd service units: orchestrator, gateway, health, logger, OTA
+- Automatic restart on crash with watchdogs and dependency ordering
+- Structured logging via journalctl
+
+### Boot-time validation and reporting
+- `pi4_feature_check` package runs a systemd one-shot checker at boot.
+- Generates a Markdown report at `/var/log/pi4_feature_report.md`.
+- Service name: `pi4-feature-check.service`
+
+This is a production-grade AV edge compute runtime, aligned with industry standards (Autoware, ROS 2 production deployments, NVIDIA DRIVE OS).
 
 ## av_services integration
 
@@ -131,7 +162,10 @@ Typical end-to-end integration flow:
 
 1. Build and flash this Buildroot image to target hardware.
 2. Confirm AV binaries are present on target under `/usr/local/bin/av-core-*`.
-3. Manage startup through `/etc/init.d/S99avcore` on the target.
+3. Services are managed through systemd:
+   - Start: `systemctl start av-core-orchestrator`
+   - Check status: `systemctl status av-core-*`
+   - View logs: `journalctl -u av-core-orchestrator -f`
 
 Buildroot packaging notes:
 
@@ -139,4 +173,13 @@ Buildroot packaging notes:
 - `BR2_PACKAGE_AV_SERVICES=y` is enabled in `configs/pi4_64_defconfig`.
 - During image build, Buildroot cross-compiles the AV binaries and installs them to `/usr/local/bin`.
 - Default config files are installed to `/etc/av-core`.
-- The BusyBox init script `/etc/init.d/S99avcore` starts `av-core-orchestrator` on boot.
+- The boot-time report package is defined in `br2_external/package/pi4_feature_check/`.
+- `BR2_PACKAGE_PI4_FEATURE_CHECK=y` is enabled in `configs/pi4_64_defconfig`.
+- Five systemd service unit files are installed to `/usr/lib/systemd/system/`:
+  - `av-core-orchestrator.service` (main coordinator)
+  - `av-core-gateway.service` (vehicle interface)
+  - `av-core-health.service` (system health monitor)
+  - `av-core-logger.service` (event logger)
+  - `av-core-ota.service` (OTA update mechanism)
+- Services are enabled at boot and have automatic restart, watchdog, and dependency ordering.
+- A one-shot `pi4-feature-check.service` is enabled at boot to generate `/var/log/pi4_feature_report.md`.

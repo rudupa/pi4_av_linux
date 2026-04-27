@@ -26,6 +26,11 @@
 
 This document describes the static and layered software architecture for the Raspberry Pi 4 Buildroot image configured in this repository.
 
+Repository boundary:
+- This repository is Pi4 image-focused only.
+- PC-side perception services and cloud backend services are out of repository scope.
+- Cross-node architecture references are system-context notes, not build artifacts produced here.
+
 Target profile:
 - Platform: Raspberry Pi 4 / CM4 class boards (64-bit)
 - Build system: Buildroot
@@ -130,7 +135,8 @@ flowchart LR
 - Root filesystem: ext2/ext4-compatible image
 - Init system: systemd (PID 1)
 - Logging: journald with `journalctl` CLI
-- Network bootstrap: systemd-networkd (DHCP on eth0 by default), systemd-resolved (DNS)
+- Network bootstrap: systemd-networkd and systemd-resolved
+- Default image networking is provided via repository-managed network configuration (rootfs overlay), not BusyBox `BR2_SYSTEM_DHCP`.
 - Remote access: OpenSSH (sshd)
 - Diagnostics: htop, strace, man, screen, lshw, util-linux utilities
 - System and package toolchain:
@@ -213,7 +219,7 @@ Top-to-bottom layered model:
 3. OS Services Layer
 - systemd userland and service management
 - Process, filesystem, network, DNS, and startup services
-- systemd-networkd/systemd-resolved with DHCP-based basic network initialization
+- systemd-networkd/systemd-resolved with image-managed network policy
 - Boot-time feature validation and reporting via `pi4-feature-check.service`
 
 4. Kernel Layer

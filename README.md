@@ -2,6 +2,17 @@
 
 This repository is set up to build a bootable Raspberry Pi 4 64-bit image using Buildroot.
 
+## Repository Scope (Pi4 Only)
+
+This repository owns the Raspberry Pi 4 software image only:
+
+- Buildroot configuration and package selection for Pi4
+- Pi4 runtime services, middleware, diagnostics, and boot-time checks
+- Pi4 deployable artifacts (`sdcard.img`, rootfs, boot partition)
+
+This repository does **not** contain the PC-side perception runtime or cloud backend implementation.
+Those are system-level peer components and are documented as external architecture context only.
+
 ## File descriptions
 
 ### Repository files

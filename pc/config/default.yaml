@@ -1,0 +1,14 @@
+node_id: pc-edge-001
+fps_target: 33
+queue_size: 2
+confidence_threshold: 0.4
+camera:
+  profile: dataset/default
+  calibration_file: pc/config/camera_calibration.yaml
+radar:
+  profile: dataset/default
+topics:
+  sensor_camera: /sensor/camera
+  sensor_radar: /sensor/radar
+  perception_objects: /perception/objects
+  perception_lane: /perception/lane

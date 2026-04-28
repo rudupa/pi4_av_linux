@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "timestamp_utc", "source", "sequence_id", "mode", "speed_mps", "steering_deg"],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "timestamp_utc": {"type": "string"},
+    "source": {"type": "string"},
+    "sequence_id": {"type": "integer"},
+    "mode": {"type": "string", "enum": ["manual", "auto", "safe", "degraded"]},
+    "speed_mps": {"type": "number"},
+    "steering_deg": {"type": "number"},
+    "throttle_pct": {"type": "number"},
+    "brake_pct": {"type": "number"},
+    "pose": {"type": "object"}
+  }
+}

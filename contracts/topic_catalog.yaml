@@ -1,0 +1,66 @@
+version: 1
+transport:
+  edge: zenoh
+  cloud: mqtt
+edge_topics:
+  - name: /sensor/camera
+    schema: sensor_camera_v1
+    qos: best_effort
+    max_hz: 33
+  - name: /sensor/radar
+    schema: sensor_radar_v1
+    qos: best_effort
+    max_hz: 33
+  - name: /perception/objects
+    schema: perception_objects_v1
+    qos: best_effort
+    max_hz: 33
+  - name: /perception/lane
+    schema: perception_lane_v1
+    qos: best_effort
+    max_hz: 33
+  - name: /vehicle/state
+    schema: vehicle_state_v1
+    qos: reliable
+    max_hz: 20
+cloud_topics:
+  - name: vehicle/telemetry/state
+    schema: vehicle_state_v1
+    qos: at_least_once
+    retain: false
+  - name: vehicle/telemetry/health
+    schema: health_v1
+    qos: at_least_once
+    retain: false
+  - name: vehicle/perception/summary
+    schema: perception_summary_v1
+    qos: at_least_once
+    retain: false
+  - name: vehicle/telemetry/events
+    schema: event_v1
+    qos: at_least_once
+    retain: false
+  - name: vehicle/cmd/mode
+    schema: cmd_mode_v1
+    qos: exactly_once
+    retain: false
+  - name: vehicle/cmd/reset
+    schema: cmd_reset_v1
+    qos: exactly_once
+    retain: false
+  - name: vehicle/cmd/fault_inject
+    schema: cmd_fault_inject_v1
+    qos: exactly_once
+    retain: false
+  - name: vehicle/cmd/replay
+    schema: cmd_replay_v1
+    qos: exactly_once
+    retain: false
+compatibility_matrix:
+  producer:
+    pc_perception: [1]
+    pi4_control: [1]
+    pi4_telemetry: [1]
+  consumer:
+    pi4_control: [1]
+    cloud_ingestion: [1]

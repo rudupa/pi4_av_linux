@@ -25,38 +25,38 @@ Note:
 
 ### 1.1 Sensor Ingestion and Playback
 
-- [ ] Implement camera playback service for recorded streams (single and multi-camera)
-- [ ] Define camera calibration loading flow (intrinsics and extrinsics)
-- [ ] Implement timestamp-normalized sensor playback scheduler
-- [ ] Implement radar playback service (range, doppler, angle data)
-- [ ] Support synchronized camera + radar playback profiles
-- [ ] Add playback controls (start, pause, seek, rate control, loop)
-- [ ] Add dropped-frame and lag detection metrics
+- [x] Implement camera playback service for recorded streams (single and multi-camera)
+- [x] Define camera calibration loading flow (intrinsics and extrinsics)
+- [x] Implement timestamp-normalized sensor playback scheduler
+- [x] Implement radar playback service (range, doppler, angle data)
+- [x] Support synchronized camera + radar playback profiles
+- [x] Add playback controls (start, pause, seek, rate control, loop)
+- [x] Add dropped-frame and lag detection metrics
 
 ### 1.2 Perception Processing
 
-- [ ] Implement camera object detection pipeline (baseline model)
-- [ ] Implement lane detection pipeline for forward camera
-- [ ] Implement radar target clustering and tracking baseline
-- [ ] Implement camera-radar association/fusion module (late fusion baseline)
-- [ ] Add occupancy/grid or free-space estimation output
-- [ ] Define perception output schema versioning (V1)
-- [ ] Add confidence threshold and class filtering policy
+- [x] Implement camera object detection pipeline (baseline model)
+- [x] Implement lane detection pipeline for forward camera
+- [x] Implement radar target clustering and tracking baseline
+- [x] Implement camera-radar association/fusion module (late fusion baseline)
+- [x] Add occupancy/grid or free-space estimation output
+- [x] Define perception output schema versioning (V1)
+- [x] Add confidence threshold and class filtering policy
 
 ### 1.3 Edge Messaging and Interfaces
 
-- [ ] Implement Zenoh publishers for `/sensor/*`
-- [ ] Implement Zenoh publishers for `/perception/*`
-- [ ] Add message serialization contracts and backward compatibility checks
-- [ ] Add interface contract tests against Pi-side consumers
-- [ ] Add edge-side QoS and rate governance per topic
+- [x] Implement Zenoh publishers for `/sensor/*`
+- [x] Implement Zenoh publishers for `/perception/*`
+- [x] Add message serialization contracts and backward compatibility checks
+- [x] Add interface contract tests against Pi-side consumers
+- [x] Add edge-side QoS and rate governance per topic
 
 ### 1.4 Edge Runtime and Ops
 
-- [ ] Add PC-side service supervisor scripts (dev and production modes)
-- [ ] Add structured logging with correlation IDs per frame/tick
-- [ ] Add GPU utilization and inference latency telemetry export
-- [ ] Add benchmark suite for camera and radar throughput
+- [x] Add PC-side service supervisor scripts (dev and production modes)
+- [x] Add structured logging with correlation IDs per frame/tick
+- [x] Add GPU utilization and inference latency telemetry export
+- [x] Add benchmark suite for camera and radar throughput
 
 ---
 
@@ -64,42 +64,42 @@ Note:
 
 ### 2.1 Control and Simulation Core
 
-- [ ] Implement production control loop module boundary (planner vs controller)
-- [ ] Add deterministic fixed-step simulation tick manager
-- [ ] Implement configurable vehicle dynamics parameter profiles
-- [ ] Add fault injection hooks in simulator (sensor dropout, delayed perception)
-- [ ] Add mode manager (`manual`, `auto`, `safe`, `degraded`)
+- [x] Implement production control loop module boundary (planner vs controller)
+- [x] Add deterministic fixed-step simulation tick manager
+- [x] Implement configurable vehicle dynamics parameter profiles
+- [x] Add fault injection hooks in simulator (sensor dropout, delayed perception)
+- [x] Add mode manager (`manual`, `auto`, `safe`, `degraded`)
 
 ### 2.2 Perception Consumption and Fusion Inputs
 
-- [ ] Implement robust subscription handlers for `/perception/objects`
-- [ ] Implement robust subscription handlers for `/perception/lane`
-- [ ] Add radar perception input contract on Pi side
-- [ ] Add perception freshness/timeout handling (stale data guards)
-- [ ] Add fallback behavior when camera or radar stream is missing
+- [x] Implement robust subscription handlers for `/perception/objects`
+- [x] Implement robust subscription handlers for `/perception/lane`
+- [x] Add radar perception input contract on Pi side
+- [x] Add perception freshness/timeout handling (stale data guards)
+- [x] Add fallback behavior when camera or radar stream is missing
 
 ### 2.3 Local Dashboard and UX
 
-- [ ] Add dashboard panels for camera detections summary
-- [ ] Add dashboard panels for radar targets summary
-- [ ] Add control-mode and fault-state indicators
-- [ ] Add chart history window for speed/steering/health
-- [ ] Add simple run controls (replay mode, reset simulation)
+- [x] Add dashboard panels for camera detections summary
+- [x] Add dashboard panels for radar targets summary
+- [x] Add control-mode and fault-state indicators
+- [x] Add chart history window for speed/steering/health
+- [x] Add simple run controls (replay mode, reset simulation)
 
 ### 2.4 Telemetry and Commands (Pi MQTT Client)
 
-- [ ] Finalize telemetry payload schema versions for state/health/perception summary
-- [ ] Add command validation and rejection reporting
-- [ ] Add MQTT reconnect and offline queue strategy
-- [ ] Add command execution audit events to telemetry stream
+- [x] Finalize telemetry payload schema versions for state/health/perception summary
+- [x] Add command validation and rejection reporting
+- [x] Add MQTT reconnect and offline queue strategy
+- [x] Add command execution audit events to telemetry stream
 
 ### 2.5 Platform, Security, and Operability
 
-- [ ] Add default SSH hardening profile for release images
-- [ ] Add runtime config file for static/DHCP network policy selection
-- [ ] Add persistent service health heartbeat endpoint
-- [ ] Add packaging hooks for version/build metadata in image
-- [ ] Add on-target smoke-test script for post-flash verification
+- [x] Add default SSH hardening profile for release images
+- [x] Add runtime config file for static/DHCP network policy selection
+- [x] Add persistent service health heartbeat endpoint
+- [x] Add packaging hooks for version/build metadata in image
+- [x] Add on-target smoke-test script for post-flash verification
 
 ---
 
@@ -107,32 +107,32 @@ Note:
 
 ### 3.1 MQTT and Ingestion
 
-- [ ] Deploy MQTT broker with TLS and topic ACLs
-- [ ] Implement telemetry ingestion service for `vehicle/telemetry/*`
-- [ ] Implement ingestion for `vehicle/perception/summary`
-- [ ] Add schema validation and dead-letter handling
-- [ ] Add device identity and auth token management
+- [x] Deploy MQTT broker with TLS and topic ACLs
+- [x] Implement telemetry ingestion service for `vehicle/telemetry/*`
+- [x] Implement ingestion for `vehicle/perception/summary`
+- [x] Add schema validation and dead-letter handling
+- [x] Add device identity and auth token management
 
 ### 3.2 Storage and Analytics
 
-- [ ] Provision time-series database (InfluxDB or TimescaleDB)
-- [ ] Define retention policies by signal class
-- [ ] Add downsampling pipelines for long-range analytics
-- [ ] Implement data quality checks (missing intervals, outliers)
+- [x] Provision time-series database (InfluxDB or TimescaleDB)
+- [x] Define retention policies by signal class
+- [x] Add downsampling pipelines for long-range analytics
+- [x] Implement data quality checks (missing intervals, outliers)
 
 ### 3.3 Dashboards and Monitoring
 
-- [ ] Build live telemetry dashboard (state, health, perception summary)
-- [ ] Build historical trend dashboards (run-level comparisons)
-- [ ] Build alerting rules (temperature, watchdog resets, link drops)
-- [ ] Add command history and acknowledgment panels
+- [x] Build live telemetry dashboard (state, health, perception summary)
+- [x] Build historical trend dashboards (run-level comparisons)
+- [x] Build alerting rules (temperature, watchdog resets, link drops)
+- [x] Add command history and acknowledgment panels
 
 ### 3.4 Remote Commands and Control API
 
-- [ ] Implement command API for `mode`, `reset`, `fault_inject`, `replay`
-- [ ] Add RBAC policy for command issuance
-- [ ] Add idempotency and replay protection for command requests
-- [ ] Add command ack timeout and retry policy
+- [x] Implement command API for `mode`, `reset`, `fault_inject`, `replay`
+- [x] Add RBAC policy for command issuance
+- [x] Add idempotency and replay protection for command requests
+- [x] Add command ack timeout and retry policy
 
 ---
 
@@ -140,23 +140,23 @@ Note:
 
 ### 4.1 Topic and Schema Governance
 
-- [ ] Publish authoritative topic catalog (Zenoh + MQTT)
-- [ ] Define JSON or binary schema contracts with version fields
-- [ ] Add compatibility matrix for producer/consumer versions
-- [ ] Add schema linting checks in CI
+- [x] Publish authoritative topic catalog (Zenoh + MQTT)
+- [x] Define JSON or binary schema contracts with version fields
+- [x] Add compatibility matrix for producer/consumer versions
+- [x] Add schema linting checks in CI
 
 ### 4.2 Time and Sync
 
-- [ ] Define canonical timestamp format and clock source policy
-- [ ] Add end-to-end latency budget per pipeline segment
-- [ ] Add clock skew detection between PC and Pi4
+- [x] Define canonical timestamp format and clock source policy
+- [x] Add end-to-end latency budget per pipeline segment
+- [x] Add clock skew detection between PC and Pi4
 
 ### 4.3 Camera and Radar Data Model
 
-- [ ] Define unified object model for camera and radar outputs
-- [ ] Define radar target uncertainty fields (range/velocity/angle covariance)
-- [ ] Define fused track lifecycle states (new, tracked, lost)
-- [ ] Define confidence and conflict resolution policy in fusion stage
+- [x] Define unified object model for camera and radar outputs
+- [x] Define radar target uncertainty fields (range/velocity/angle covariance)
+- [x] Define fused track lifecycle states (new, tracked, lost)
+- [x] Define confidence and conflict resolution policy in fusion stage
 
 ---
 
@@ -164,33 +164,33 @@ Note:
 
 ### 5.1 Unit and Integration Tests
 
-- [ ] Add unit tests for control, simulation, and health components
-- [ ] Add interface tests for Zenoh topic contracts
-- [ ] Add interface tests for MQTT telemetry and commands
-- [ ] Add camera-radar fusion module tests with canned datasets
+- [x] Add unit tests for control, simulation, and health components
+- [x] Add interface tests for Zenoh topic contracts
+- [x] Add interface tests for MQTT telemetry and commands
+- [x] Add camera-radar fusion module tests with canned datasets
 
 ### 5.2 Scenario and System Tests
 
-- [ ] Add end-to-end smoke test: playback -> perception -> control -> telemetry
-- [ ] Add degraded network scenario tests (edge-cloud disconnect)
-- [ ] Add stale perception scenario tests and expected fail-safe behavior
-- [ ] Add high-load scenario tests for PC inference and Pi control stability
+- [x] Add end-to-end smoke test: playback -> perception -> control -> telemetry
+- [x] Add degraded network scenario tests (edge-cloud disconnect)
+- [x] Add stale perception scenario tests and expected fail-safe behavior
+- [x] Add high-load scenario tests for PC inference and Pi control stability
 
 ### 5.3 Acceptance Criteria and Quality Gates
 
-- [ ] Define pass/fail thresholds for control latency and telemetry lag
-- [ ] Define perception minimum quality metrics for camera and radar pipelines
-- [ ] Add release checklist for image, services, and cloud readiness
+- [x] Define pass/fail thresholds for control latency and telemetry lag
+- [x] Define perception minimum quality metrics for camera and radar pipelines
+- [x] Add release checklist for image, services, and cloud readiness
 
 ---
 
 ## 6. Release and DevOps - Pending Tasks
 
-- [ ] Add CI pipeline for build + static checks + schema checks
-- [ ] Add artifact version tagging for image and service binaries
-- [ ] Add deployment manifests for cloud stack (broker, DB, dashboards)
-- [ ] Add reproducible experiment profile files (dataset + config + expected outputs)
-- [ ] Add changelog automation for architecture and interface changes
+- [x] Add CI pipeline for build + static checks + schema checks
+- [x] Add artifact version tagging for image and service binaries
+- [x] Add deployment manifests for cloud stack (broker, DB, dashboards)
+- [x] Add reproducible experiment profile files (dataset + config + expected outputs)
+- [x] Add changelog automation for architecture and interface changes
 
 ---
 

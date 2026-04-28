@@ -1,0 +1,7 @@
+alerts:
+  - name: high_temp
+    expr: temp_c > 80
+  - name: service_restart_spike
+    expr: restart_count > 3
+  - name: telemetry_silent
+    expr: no_data_for_seconds > 10

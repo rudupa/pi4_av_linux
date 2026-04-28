@@ -1,0 +1,7 @@
+name: lab_default
+dataset: dataset/default
+expected:
+  perception_fps_min: 20
+  telemetry_topics:
+    - vehicle/telemetry/state
+    - vehicle/telemetry/health

@@ -1,0 +1,16 @@
+node_id: pi4-001
+mode: auto
+tick_hz: 20
+network_policy: static
+mqtt:
+  host: localhost
+  port: 1883
+  topic_state: vehicle/telemetry/state
+  topic_health: vehicle/telemetry/health
+  topic_perception_summary: vehicle/perception/summary
+  topic_events: vehicle/telemetry/events
+commands:
+  mode: vehicle/cmd/mode
+  reset: vehicle/cmd/reset
+  fault_inject: vehicle/cmd/fault_inject
+  replay: vehicle/cmd/replay

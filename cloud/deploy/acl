@@ -1,0 +1,8 @@
+user pi4
+topic write vehicle/telemetry/#
+topic write vehicle/perception/#
+topic read vehicle/cmd/#
+
+user operator
+topic read vehicle/telemetry/#
+topic write vehicle/cmd/#

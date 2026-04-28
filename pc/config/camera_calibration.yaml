@@ -1,0 +1,6 @@
+schema_version: 1
+camera_id: front_main
+intrinsics: [1200.0, 1200.0, 640.0, 360.0]
+extrinsics:
+  translation_m: [0.0, 0.0, 1.2]
+  rotation_rpy_deg: [0.0, 0.0, 0.0]

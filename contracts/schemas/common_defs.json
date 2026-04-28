@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common_defs.json",
+  "definitions": {
+    "base": {
+      "type": "object",
+      "required": ["schema_version", "timestamp_utc", "source", "sequence_id"],
+      "properties": {
+        "schema_version": {"type": "integer", "const": 1},
+        "timestamp_utc": {"type": "string"},
+        "source": {"type": "string"},
+        "sequence_id": {"type": "integer", "minimum": 0},
+        "correlation_id": {"type": "string"}
+      }
+    }
+  }
+}

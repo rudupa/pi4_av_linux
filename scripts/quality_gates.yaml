@@ -1,0 +1,5 @@
+quality_gates:
+  control_latency_ms_max: 60
+  telemetry_lag_ms_max: 500
+  perception_fps_min: 20
+  perception_drop_ratio_max: 0.2

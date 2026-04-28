@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","required":["schema_version","cmd_id","action"],"properties":{"schema_version":{"type":"integer","const":1},"cmd_id":{"type":"string"},"action":{"type":"string","enum":["start","pause","seek","stop"]},"offset_ms":{"type":"integer"}}}

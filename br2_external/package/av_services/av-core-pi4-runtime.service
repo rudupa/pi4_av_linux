@@ -1,0 +1,19 @@
+[Unit]
+Description=AV Core Pi4 Python Runtime
+Documentation=file:///etc/pi4/runtime.yaml
+After=network-online.target av-core-orchestrator.service
+Wants=network-online.target av-core-orchestrator.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/av
+Environment=PYTHONPATH=/opt/av
+ExecStart=/usr/bin/python3 -m pi4.src.main --config /etc/pi4/runtime.yaml
+Restart=on-failure
+RestartSec=3s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=av-core-pi4-runtime
+
+[Install]
+WantedBy=multi-user.target
